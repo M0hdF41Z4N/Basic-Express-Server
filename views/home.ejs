@@ -4,7 +4,7 @@
     <!-- <title>To-Do App</title> -->
     <title><%= title %></title>
     <!-- Style sheet -->
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="./style.css">
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="/add.svg">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -15,41 +15,76 @@
         <!-- Heading -->
         <h1 class="header">To-Do App</h1>
         <!-- Input Section -->
-        <div class="input-section">
-            <!-- To get Input -->
-            <input type="text" id="add" placeholder="Add task">
-            <!-- Add btn -->
-            <img src="./add.svg" class="add-btn" />
+        <div class="row">
+            <div class="col-sm">
+                <form method="POST" action="/create_task">
+                    <div class="input-section">
+                    <!-- To get Input -->
+                    <label for="task">Description</label>
+                    <input type="text" name="task" id="add" placeholder="Add your task here" required>
+                    <!-- Category -->
+                    <label for="category">Select your category</label>
+                    <select id="category" name="category">
+                        <option value="Personal">Personal</option>
+                        <option value="Work">Work</option>
+                        <option value="Hobby">Hobby</option>
+                        <option value="School">School</option>
+                        <option value="Cleaning">Cleaning</option>
+                        <option value="Others">Other</option>
+                    </select>
+                    <label for="dueDate">Due Date</label>
+                    <input type="date" id="dueDate" name="dueDate" required>
+
+                    <!--  -->
+                    <!-- Add btn -->
+                    <button type="submit" class="btn success" >Add Task</button>
+                </form>
+            </div>
         </div>
-        <!-- Divider -->
-        <hr>
+        <div class="col-sm">
+            <form method="POST" action="/todos/delete">
         <!-- List of Task -->
-        <ul id="list">
-            <!-- <li class="list-item">
-                <input type="checkbox" id=12345 >
-                <label for="12345">Permanent</label>
-                <img src="./cross.png" class="delete" data-id=12345 />
-            </li> -->
-        </ul>
-        <!-- Count of Tasks -->
-        <span id="count">Total Tasks : 0</span>
+            <ul id="list">
+                <!-- <li class="list-item">
+                    <input type="checkbox" id=12345 >
+                    <label for="12345">Permanent</label>
+                    <img src="./cross.png" class="delete" data-id=12345 />
+                </li> -->
+                <% if (task_list.length>0) {%>
+                <% for (let task of task_list) { %>
+                <li class="list-item new-box">
+                    <card>
+                        <div class="card-body">
+                            <!-- <input type="checkbox" id=<%= task._id %>  <%= task.status ? 'checked' : '' %>>
+                            <label for="<%= task._id %>"><%= task.text %></label> -->
+                            <input type="checkbox" name="tasks[]" value=<%= task._id %>  <%= task.status ? 'checked' : '' %>>
+                            <label for="tasks[]"><%= task.text %></label>
+                            <a href="/delete_task/<%= task._id %>" ><img src="./cross.png" class="delete" alt="delete-btn" /></a>
+                        </div>
+                        <div class="card-footer">
+                            <span class="small-text"><%= task.due_date %></span>
+                            <span class="badge <%= task.category %>"><%= task.category %></span>
+                        </div>
+                    </card>
+                </li>
+                <% } %>
+                    <!-- Count of Tasks -->
+                    <span id="count">Total Tasks : <%= task_list.length%></span>
+                    <button type="submit" class="btn delete-btn" >Delete Task</button>
+                </form>
+                    <!-- <span class="btn"></span> -->
+                <% } else {%>
+                    <h4 class="summary-header">No tasks found.</h4>
+                <%} %>
+            </ul>
+            
+            </div>
+        </div>
     </div>
 
-    <!-- Popup : For notfications -->
-    <div id="popup-box" class="modal">
-        <!-- Popup content -->
-        <div class="content">
-            <!-- Popup text -->
-            <h3 id="context-text" style="color: green;">
-            </h3>
-            <a href="#" 
-               class="box-close">
-                ×
-            </a>
-        </div>
-    </div>
+   
 
     <!-- Internal JS -->
-    <script src="./index.js"></script>
+    <script src="./main.js"></script>
 </body>
 </html>
